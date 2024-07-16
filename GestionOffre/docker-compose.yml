@@ -1,0 +1,28 @@
+version: "2.7.4"
+services:
+
+  offre:
+    container_name: offre
+    build: ./GestionOffre
+    ports:
+      - "8084:8084"
+    hostname: offre
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka
+
+  discovery:
+    build: ./EurekaServer
+    ports:
+      - "8761:8761"
+    image: "discovery-service"
+  apigateway:
+    container_name: apigateway
+    build: ./apigetway
+    ports:
+      - "8089:8089"
+    hostname: apigateway
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka
+    image: "apigateway"
+    depends_on:
+      - discovery
